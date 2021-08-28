@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -8,13 +9,14 @@ import Col from 'react-bootstrap/Col'
 import GoogleLogin from 'react-google-login'
 import GoogleButton from 'react-google-button'
 
-const Signup = () => {
+const Login = () => {
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const history = useHistory()
     const [icon, seticon] = useState('visibility_off')
     const textinput = useRef(null);
+    const history = useHistory();
+
+
     function handleclick() {
         if (textinput.current.type === "password") {
             textinput.current.type = "text"
@@ -28,12 +30,12 @@ const Signup = () => {
     }
     const handlesubmit = (e) => {
         e.preventDefault()
-        if(username==='' || email==='' || password===''){
+        if(username===''|| password===''){
             alert("Kindly enter valid details..")
         }
         else{
-        const a = { username, email, password }
-        fetch("/signup", {
+        const a = { username, password }
+        fetch("/login", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -44,42 +46,49 @@ const Signup = () => {
                 return res.json();
             })
             .then((data) => {
-                //const s = data.id.insertedId
-                //console.log(data.id.insertedId)
-                //history.push(`/user/${s}/dashboard`);
-                console.log(data)
+                console.log("data",data)
+                /*if (data["id"] === null) {
+                    history.push('/signup')
+                }
+                else {
+                    history.push(`/user/${data["id"]}/dashboard`);
+
+                }*/
+
             })
         }
     }
     const Google = (response) => {
         console.log(response.profileObj)
+        console.log(response)
         let a = {
             "username": response.profileObj.name,
             "email": response.profileObj.email,
             "password": response.profileObj.googleId
         }
-        fetch(`/signup`, {
-            method: 'POST',
-            body: JSON.stringify(a),
+
+        fetch("/login", {
+            method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-            }
-
+            },
+            body: JSON.stringify(a)
         })
             .then((res) => {
                 return res.json();
             })
             .then((data) => {
-                //const s=data.id.insertedId
-                //console.log(this.state)
-                /*const s = data.id.insertedId
-                console.log(data.id.insertedId)
-                history.push(`/user/${s}/dashboard`);*/
-                console.log(data)
-
+                //console.log("data",data)
+                if (data["id"] === null) {
+                    history.push('/signup')
+                }
+                else {
+                    history.push(`/user/${data["id"]}/dashboard`);
+                }
 
             })
     }
+
     return (
         <div id="form-boot-con" className="d-flex align-items-center" >
             <Container>
@@ -87,13 +96,8 @@ const Signup = () => {
                     <Col lg={6}>
                         <Form onSubmit={handlesubmit}>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
-                                <Form.Label id="bt-main-form-lb">Username</Form.Label>
-                                <Form.Control type="text" value={username} onChange={(e) => { setUsername(e.target.value) }} placeholder="username" />
-
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label id="bt-main-form-lb">Email</Form.Label>
-                                <Form.Control type="email" value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder="email" />
+                                <Form.Control type="email" value={username} onChange={(e) => { setUsername(e.target.value) }} placeholder="email" />
 
                             </Form.Group>
 
@@ -104,7 +108,7 @@ const Signup = () => {
                             </Form.Group>
 
                             <Button variant="outline-dark" type="submit">
-                                Sign up
+                                log in
                             </Button>
                             
                         </Form>
@@ -143,9 +147,14 @@ const Signup = () => {
 
             </Container>
 
+
+
         </div>
+
+
+
 
     );
 }
 
-export default Signup;
+export default Login;
