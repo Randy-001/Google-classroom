@@ -1,6 +1,37 @@
 const express = require('express')
-const app = express()
-app.get('/auth',require('./routes/auth'))
-app.listen(process.env.PORT||4000,function(){
-    console.log('Listening ---')
+//app.get('/auth',require('./routes/auth'))
+//const express=require('express');
+const cors=require('cors');
+const path = require('path')
+const mongoose=require('mongoose')
+
+     
+const app = express();
+app.use(cors());
+
+const dburi='mongodb+srv://project_flippr:TECHPHANTOM@cluster0.4bgb5.mongodb.net/classroom?retryWrites=true&w=majority';
+mongoose.connect(dburi, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
 })
+.then((res)=>{
+    console.log("db connected")
+})
+.catch((err)=>{
+    console.log("db not connected")
+    console.log(err)
+})
+
+app.use(express.urlencoded({extended : true}));
+
+app.use(express.json())
+app.use(require('./routes/app'));
+
+app.use(express.static("client/build"));
+app.get("*", (req, res) => {
+     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+   });
+
+app.listen(process.env.PORT || 4000,function(){
+     console.log("listening.. on port "+4000);
+});
