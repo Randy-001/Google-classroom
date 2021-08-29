@@ -10,6 +10,8 @@ import GoogleButton from 'react-google-button'
 
 const Signup = () => {
     const [username, setUsername] = useState('');
+    const [student, setStudent] = useState(false);
+    const [teacher, setTeacher] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const history = useHistory()
@@ -32,7 +34,7 @@ const Signup = () => {
             alert("Kindly enter valid details..")
         }
         else{
-        const a = { username, email, password }
+        const a = { username, email, password ,student,teacher}
         fetch("/signup", {
             method: "POST",
             headers: {
@@ -102,6 +104,32 @@ const Signup = () => {
                                 <span className="material-icons" style={{ float: 'right' }} onClick={handleclick}>{icon}</span>
                                 <Form.Control type="password" placeholder="Password" ref={textinput} value={password} onChange={(e) => { setPassword(e.target.value) }} />
                             </Form.Group>
+                            <Row>
+                                    
+                            <Col lg={2} id="radio-col-1">
+                                        <Form.Check
+                                           
+                                            label="Teacher"
+                                            value={teacher} onChange={() => { setStudent(true); setTeacher(false); }}
+                                            name="group1"
+                                            type={'radio'}
+                                           
+                                        />
+                                        </Col>
+                                        <Col lg={2}>
+                                        </Col>
+                                        <Col lg={2} >
+                                        <Form.Check 
+                                           
+                                            label="Student"
+                                            value={student} onChange={() => { setStudent(true); setTeacher(false); }}
+                                            name="group1"
+                                            type={'radio'}
+                                        />
+                                    </Col>
+                            </Row>
+                            <br></br>
+
 
                             <Button variant="outline-dark" type="submit">
                                 Sign up
