@@ -2,6 +2,8 @@
 import './App.css';
 import Signup from "./Components/Auth/Signup.js"
 import Login from "./Components/Auth/Login.js"
+import StudentDash from "./Components/Classroom/StudentDash"
+import Join  from './Components/Classroom/Join'
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 function App() {
   return (
@@ -13,6 +15,12 @@ function App() {
               </Route>
               <Route exact path="/login">
                    <Login/>
+              </Route>
+              <Route exact path="/studentdashboard">
+                   <StudentDash/>
+              </Route>
+              <Route exact path="/join">
+                   <Join/>
               </Route>
         </Switch>
       </Router>
