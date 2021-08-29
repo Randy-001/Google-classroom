@@ -4,11 +4,12 @@ const express = require('express')
 const cors=require('cors');
 const path = require('path')
 const mongoose=require('mongoose')
+const session = require('express-session');
 
      
 const app = express();
 app.use(cors());
-
+app.use(session({secret: 'techphantom',saveUninitialized: true,resave: true}));
 const dburi='mongodb+srv://project_flippr:TECHPHANTOM@cluster0.4bgb5.mongodb.net/classroom?retryWrites=true&w=majority';
 mongoose.connect(dburi, {
     useUnifiedTopology: true,
