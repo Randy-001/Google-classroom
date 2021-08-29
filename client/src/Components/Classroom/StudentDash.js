@@ -19,7 +19,7 @@ export default function StudentDash() {
                     {data.map((ele) => {
 
                         return (
-                            <Col sm={4}>
+                            <Col lg={4} sm={12}>
                                 <Card border="primary" style={{ width: '18rem' }}>
                                     <Card.Img variant="top" src={cardimg} />
                                     <Card.Body>

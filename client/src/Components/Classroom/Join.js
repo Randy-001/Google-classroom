@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/esm/Container'
 import join from './joinimg.svg'
+
 export default function Join() {
     return (
         <div>
