@@ -6,14 +6,12 @@ import Container from 'react-bootstrap/esm/Container'
 import { useState,useEffect} from 'react'
 import cardimg from './teacherimg.svg'
 import ClsNavbar from "../Navbar/ClsNavbar"
-
+import { useHistory } from 'react-router-dom'
 
 export default function Teacherdashboard() {
     const [data,setdata]=useState([])
     const [card,setcard]=useState(false)
-    const pageRedirection = (page) =>{
-        history.push(`/student/${page}`)
-    }
+    const history = useHistory()
     useEffect(()=>{
         fetch("/teacherdashboard", {
             method: "GET",
@@ -37,7 +35,9 @@ export default function Teacherdashboard() {
        
     },[])
 
-    
+    const pageRedirection = (page) =>{
+        history.push(`/teacher/${page}`)
+    }
     return (
 
         <div>
@@ -47,7 +47,7 @@ export default function Teacherdashboard() {
                     
                     {card && data.map((ele) => {
                         return(
-                           <div className="cls" key={ele.classcode} onClick={()=>{console.log(ele.classcode)}}>
+                           <div className="cls" key={ele.classcode} onClick={()=>{pageRedirection(ele.classcode)}}>
                             <Col lg={4} sm={12}>
                                
                                 <Card border="primary" style={{ width: '18rem'}}>

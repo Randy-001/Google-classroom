@@ -35,12 +35,13 @@ code {
 }
 .class-card{ 
   background-image: url("https://www.thoughtworks.com/content/dam/thoughtworks/images/photography/banner-image/clients/cs_banner_government-digital-service.jpeg");
-  min-width: 80%;
+  min-width: 100%;
   min-height: 200px;
   background-size: cover;
   background-position: center;
   border-radius:20px ;
   margin: 0 auto;
+  margin-top:50px;
 }
 .class-card-main{
   display: flex;
@@ -55,6 +56,7 @@ code {
 }
 .class-card-link{
   font-size: 15px;
+  color:whitesmoke
 }
 #join-col-0 img{
   display:block;
@@ -96,6 +98,9 @@ code {
   width:80%;
   height:100vh;
 }
+
+
+
 #test-form-img{
   display:block;
   margin-left:auto;
@@ -132,6 +137,7 @@ code {
 .btn-row{
   width:500px;
   float:right;
+ 
   display:flex;
   flex-direction: row;
   align-items: center;

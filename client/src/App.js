@@ -29,7 +29,7 @@ function App() {
               <Route exact path="/join">
                    <Join/>
               </Route>
-              <Route exact path='/student/:id'>
+              <Route exact path='/teacher/:id'>
                     <TeacherClass/>
                </Route>
               <Route exact path="/create">

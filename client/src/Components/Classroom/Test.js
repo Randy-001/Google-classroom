@@ -10,6 +10,7 @@ export default function Test() {
     const [dueDate,setDue ] = useState('')
     const [formLink,setForm] = useState('')
     const [mark,setMark] = useState('')
+    const [dueTime,setTime] = useState('')
     const history = useHistory()
     const { id } = useParams()
     const addForm=(event)=>{
@@ -18,8 +19,10 @@ export default function Test() {
             'classcode':id,
             'testlink':formLink,
             'duedate':dueDate,
+            'duetime':dueTime,
             'totalmarks':mark
         }
+        console.log(formData)
         fetch('/testform', {
             method: "POST",
             headers: {
@@ -46,9 +49,10 @@ export default function Test() {
                     
                
                     <Col sm={12} lg={6} id='test-form-col-1'>
-                        <form id='test-form'  onSubmit = {()=>{addForm()}}>
+                        <form id='test-form'  onSubmit = {addForm}>
                             <input placeholder = 'Form link' onChange = {(event)=>{setForm(event.target.value)}} id='form-link-inp'></input>
-                            <input placeholder = 'Due date' onChange = {(event)=>{setDue(event.target.value)}} id='form-link-inp'></input>
+                            <input placeholder = 'Due date' type='date' onChange = {(event)=>{setDue(event.target.value)}} id='form-link-inp'></input>
+                            <input placeholder = 'Due time' type='time' onChange = {(event)=>{setTime(event.target.value)}} id='form-link-inp'></input>
                             <input placeholder = 'Total marks' onChange = {(event)=>{setMark(event.target.value)}} id='form-link-inp'></input>
                             <button type='submit'>Create</button>
 
