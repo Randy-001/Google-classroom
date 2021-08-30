@@ -7,6 +7,7 @@ import Join  from './Components/Classroom/Join'
 import Create  from './Components/Classroom/Create'
 import Test from './Components/Classroom/Test'
 import Teacherdashboard from './Components/Classroom/Teacherdashboard'
+import StudentClass from './Components/Classroom/StudentClass';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import TeacherClass from './Components/Classroom/TeacherClass';
 function App() {
@@ -37,6 +38,9 @@ function App() {
               </Route>
               <Route exact path="/:id/test">
                    <Test/>
+              </Route>
+              <Route exact path="/student/:id">
+                   <StudentClass/>
               </Route>
         </Switch>
       </Router>

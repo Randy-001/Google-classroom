@@ -4,7 +4,6 @@ import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/esm/Container'
-
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
@@ -13,7 +12,7 @@ import cardimg from './class.svg'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
-export default function TeacherClass() {
+export default function StudentClass() {
     const { id } = useParams()
     const [classInfo, setClass] = useState('')
     const [test, setTest] = useState([])
@@ -22,32 +21,7 @@ export default function TeacherClass() {
         history.push(`/${id}/test`)
     }
     const Assignment = () => {
-        let x = alert('Not available');
-      
-    }
-    const meet=()=>{
-        let x = prompt('Meet link')
-        let link = {'link':x}
-        fetch('/',{
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(link)
-        })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-
-
-                setClass(data['data'])
-                setTest(Object.keys(data['data']['test']))
-                console.log(data)
-                console.log(classInfo)
-
-            })
-
+        alert('Not available')
     }
     useEffect(() => {
         let userData = {
@@ -68,8 +42,7 @@ export default function TeacherClass() {
 
                 setClass(data['data'])
                 setTest(Object.keys(data['data']['test']))
-                console.log(data)
-                console.log(classInfo)
+                
 
             })
 
@@ -84,28 +57,15 @@ export default function TeacherClass() {
                                 <div className="class-card-name">
                                     <p>{classInfo.classname}</p>
                                     <p style={{ fontSize: 'medium' }}>{classInfo.classcode}</p>
-                                    <a className="class-card-link">{classInfo.meetlink ==='' ? '' : <a onClick={()=>{meet()}}>add meet link</a> }</a>
+                                    <a className="class-card-link">Meeting link:https://meet.google.com/wey-xnbh-vvt</a>
 
                                 </div>
                             </div>
                         </div>
                     </Col>
                 </Row>
-                <Row>
-                    <Col lg={12}>
-                        <Container>
-                            <div class='btn-row'>
-                                <button id='test-btn' onClick={() => { Test() }}>Test</button>
-                                <button id='assignment-btn' onClick={() => { Assignment() }}>Assignment</button>
-
-                            </div>
-
-
-                        </Container>
-
-                    </Col>
-                </Row>
-                <Row>
+                
+                <Row style={{marginTop:'50px'}}>
 
                     <Col lg={12}>
                         <div>
@@ -129,8 +89,9 @@ export default function TeacherClass() {
 
                                                                     <Card.Body>
 
-                                                                        <Card.Title><span>Exam</span><span style={{float:'right'}}><button id='update-btn'>Update Score</button></span></Card.Title>
-                                                                        <Card.Text>Due {date}</Card.Text>
+                                                                        <Card.Title>Exam</Card.Title>
+                                                                        <Card.Text>{classInfo['test'][ele]['testlink']}</Card.Text>
+                                                                        <Card.Text>Due {date}<span style={{float:'right'}}><button id='update-btn'>Hand in</button></span></Card.Text>
                                                                         
 
                                                                     </Card.Body>

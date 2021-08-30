@@ -73,6 +73,29 @@ code {
   width:100%;
   
 }
+#test-cards-con{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+#update-btn{
+  font-size: small;
+  
+  background-color: #5931b5;
+  color:white;
+  border:none;
+  height:30px;
+  width:100px;
+  border-radius: 5px;
+
+
+
+}
+#test-cards{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 #test-btn{
   
   width:200px;
@@ -83,6 +106,12 @@ code {
   color:whitesmoke;
   border-radius: 20px;
   background-color: #5931b5;
+}
+#meet-btn{
+  
+  color:whitesmoke;
+  font-size: medium;
+  
 }
 #test-form-col-1{
   display:flex;
