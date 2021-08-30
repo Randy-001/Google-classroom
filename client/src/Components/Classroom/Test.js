@@ -34,7 +34,9 @@ export default function Test() {
                 return res.json();
             })
             .then((data) => {
-               
+               if(data['success']){
+                   history.push(`/teacher/${id}`)
+               }
 
             })
 

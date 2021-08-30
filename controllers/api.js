@@ -109,7 +109,6 @@ const createclassroom = (req, res) => {
 
 
 }
-<<<<<<< HEAD
 const classData = (req,res)=>{
     const classroom = db.Classroom
     classroom.findOne({'classcode':req.body.classCode},function(err,result){
@@ -126,10 +125,8 @@ const classData = (req,res)=>{
 
 }
 
-const joinclass = (req,res)=>{
-=======
+
 const joinclass = (req, res) => {
->>>>>>> a391aca3be1346a059e2cf220338ac924d605644
     const classroom = db.Classroom;
     sess = req.session;
     console.log(sess)
@@ -276,14 +273,10 @@ module.exports = {
     createclassroom,
     studentdashboard,
     joinclass,
-<<<<<<< HEAD
+    testform,
+    send_cls_details,
     classData
 }
-=======
-    testform,
-    send_cls_details
-}
 
 
 
->>>>>>> a391aca3be1346a059e2cf220338ac924d605644

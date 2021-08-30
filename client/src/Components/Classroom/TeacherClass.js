@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/esm/Container'
+
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
@@ -15,6 +16,7 @@ import 'react-tabs/style/react-tabs.css';
 export default function TeacherClass() {
     const { id } = useParams()
     const [classInfo, setClass] = useState('')
+    const [test,setTest] = useState([])
     const history = useHistory()
     const Test = () => {
         history.push(`/${id}/test`)
@@ -40,6 +42,9 @@ export default function TeacherClass() {
 
 
                 setClass(data['data'])
+                setTest(Object.keys(data['data']['test']))
+                console.log(data)
+                console.log(classInfo)
 
             })
 
@@ -86,10 +91,14 @@ export default function TeacherClass() {
                                 </TabList>
 
                                 <TabPanel>
-                                    <h2>Any content 1</h2>
+                                    {test &&
+                                        test.map(ele=>{
+                                            return(<Card>{classInfo['test'][ele]['testlink']}</Card>)
+                                        })
+                                    }
                                 </TabPanel>
                                 <TabPanel>
-                                    <h2>Any content 2</h2>
+                                    <h2>No Assignments</h2>
                                 </TabPanel>
                             </Tabs>
 
