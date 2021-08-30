@@ -264,6 +264,25 @@ const send_cls_details = (req, res) => {
     })
 }
 
+const handin=(req,res)=>{
+    sess=req.session;
+    const classroom=db.Classroom
+    classroom.find({'classcode':req.body.classcode},(err,docs)=>{
+        if(err) throw err
+        const all_test=docs[0]["test"]
+        console.log("before",all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"])
+        all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"]=new Date();
+        console.log("after",all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"])
+        classroom.findOneAndUpdate({"classcode":req.body.classcode}, {"test":all_test},(err,d)=>{
+            if(err) throw err
+            return res.json({success:true})
+        })
+
+    })
+
+
+}
+
 
 
 module.exports = {
@@ -275,7 +294,8 @@ module.exports = {
     joinclass,
     testform,
     send_cls_details,
-    classData
+    classData,
+    handin
 }
 
 
