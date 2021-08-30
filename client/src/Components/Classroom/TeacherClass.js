@@ -25,10 +25,46 @@ export default function TeacherClass() {
         let x = alert('Not available');
       
     }
-    const meet=()=>{
+    const meet=(clscode)=>{
+        console.log(clscode)
         let x = prompt('Meet link')
-        let link = {'link':x}
-        fetch('/',{
+        let link = {'meetlink':x,'classcode':clscode}
+        fetch('/meet',{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(link)
+        })
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                console.log(data)
+                setClass(data['success'])
+                if(data['success']['test']!=null){
+                    setTest(Object.keys(data['success']['test']))
+                }
+
+                
+
+            })
+
+    }
+    const updateFn=(formCode,clscode)=>{
+        let x = prompt('Spreadsheet link')
+        x = x.split('/')
+        let max = 0
+        let maxStr = ''
+        for(let i = 0;i<x.length;i++){
+            if(max<x[i].length){
+                maxStr = x[i]
+                max = x[i].length
+            }
+
+        }
+        let link = {'id':maxStr,'classcode':clscode,'testcode':formCode}
+        fetch('/spreadsheet', {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -41,12 +77,13 @@ export default function TeacherClass() {
             .then((data) => {
 
 
-                setClass(data['data'])
-                setTest(Object.keys(data['data']['test']))
+                
                 console.log(data)
-                console.log(classInfo)
+                
 
             })
+
+        
 
     }
     useEffect(() => {
@@ -67,7 +104,10 @@ export default function TeacherClass() {
 
 
                 setClass(data['data'])
-                setTest(Object.keys(data['data']['test']))
+                if(data['data']['test']!= null){
+                    setTest(Object.keys(data['data']['test']))
+                }
+                
                 console.log(data)
                 console.log(classInfo)
 
@@ -84,8 +124,7 @@ export default function TeacherClass() {
                                 <div className="class-card-name">
                                     <p>{classInfo.classname}</p>
                                     <p style={{ fontSize: 'medium' }}>{classInfo.classcode}</p>
-                                    <a className="class-card-link">{classInfo.meetlink ==='Not available' ? classInfo.meetlink : <a onClick={()=>{meet()}}>add meet link</a> }</a>
-
+                                    {classInfo.meetlink !=='Not available' ? <a className="class-card-link" target='_blank' href = {classInfo.meetlink}>{classInfo.meetlink}</a> : <a onClick={()=>{meet(classInfo.classcode)}}>add meet link</a> }
                                 </div>
                             </div>
                         </div>
@@ -123,13 +162,13 @@ export default function TeacherClass() {
                                                 let date = new Date(classInfo['test'][ele]['duedate']).toString().slice(0, 15)
                                                 return (
                                                     
-                                                        <Col id='test-cards' sm={12} lg={8}>
+                                                        <Col id='test-cards' sm={12} key = {ele} lg={8}>
                                                             
                                                                 <Card>
 
                                                                     <Card.Body>
 
-                                                                        <Card.Title><span>Exam</span><span style={{float:'right'}}><button id='update-btn'>Update Score</button></span></Card.Title>
+                                                                        <Card.Title><span>Exam</span><span style={{float:'right'}}><button id='update-btn' onClick = {()=>{updateFn(ele,classInfo.classcode)}}>Update Score</button></span></Card.Title>
                                                                         <Card.Text>Due {date}</Card.Text>
                                                                         
 
@@ -144,6 +183,7 @@ export default function TeacherClass() {
 
                                                 )
                                             })
+                                        
                                         }
                                     </Row>
 
