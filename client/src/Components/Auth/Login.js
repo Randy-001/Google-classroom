@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -8,7 +7,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import GoogleLogin from 'react-google-login'
 import GoogleButton from 'react-google-button'
-import { Link } from 'react-router-dom'
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -48,15 +46,6 @@ const Login = () => {
             })
             .then((data) => {
                 console.log("data",data)
-                if(data.success && data.teacher){
-                    history.push("/teacherdashboard")
-                }
-                else if(data.success && data.student){
-                    history.push("/studentdashboard")
-                }
-                else{
-                    alert("Invalid username or password")
-                }
                 /*if (data["id"] === null) {
                     history.push('/signup')
                 }
@@ -88,22 +77,13 @@ const Login = () => {
                 return res.json();
             })
             .then((data) => {
-                if(data.success && data.teacher){
-                    history.push("/teacherdashboard")
-                }
-                else if(data.success && data.student){
-                    history.push("/studentdashboard")
-                }
-                else{
-                    alert("Invalid username or password")
-                }
                 //console.log("data",data)
-                /*if (data["id"] === null) {
+                if (data["id"] === null) {
                     history.push('/signup')
                 }
                 else {
                     history.push(`/user/${data["id"]}/dashboard`);
-                }*/
+                }
 
             })
     }
@@ -122,16 +102,15 @@ const Login = () => {
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label id="bt-main-form-lb">Password</Form.Label>
-                                <i><span className="material-icons" style={{ float: 'right' }} onClick={handleclick}>{icon}</span></i>
+                                <span className="material-icons" style={{ float: 'right' }} onClick={handleclick}>{icon}</span>
                                 <Form.Control type="password" placeholder="Password" ref={textinput} value={password} onChange={(e) => { setPassword(e.target.value) }} />
                             </Form.Group>
 
                             <Button variant="outline-dark" type="submit">
-                                Log in
+                                log in
                             </Button>
                             
                         </Form>
-                        <p style={{ marginTop: '25px'}}><strong>Don't have an account ? <Link to='/signup' style={{color:'white'}}>Signup</Link></strong></p>
                         <Row style={{ marginTop: '25px', marginBottom: '25px' }}>
                             <Col lg={12}>
                                 <hr style={{ backgroundColor: "gray" }} />

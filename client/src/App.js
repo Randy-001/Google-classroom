@@ -5,9 +5,10 @@ import Login from "./Components/Auth/Login.js"
 import StudentDash from "./Components/Classroom/StudentDash"
 import Join  from './Components/Classroom/Join'
 import Create  from './Components/Classroom/Create'
+import Test from './Components/Classroom/Test'
 import Teacherdashboard from './Components/Classroom/Teacherdashboard'
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import StudentClass from './Components/Classroom/StudentClass';
+import TeacherClass from './Components/Classroom/TeacherClass';
 function App() {
   return (
     <div className="app">
@@ -29,10 +30,13 @@ function App() {
                    <Join/>
               </Route>
               <Route exact path='/student/:id'>
-                    <StudentClass/>
+                    <TeacherClass/>
                </Route>
               <Route exact path="/create">
                    <Create/>
+              </Route>
+              <Route exact path="/:id/test">
+                   <Test/>
               </Route>
         </Switch>
       </Router>

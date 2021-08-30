@@ -7,9 +7,13 @@ import { useState,useEffect} from 'react'
 import cardimg from './teacherimg.svg'
 import ClsNavbar from "../Navbar/ClsNavbar"
 
+
 export default function Teacherdashboard() {
     const [data,setdata]=useState([])
     const [card,setcard]=useState(false)
+    const pageRedirection = (page) =>{
+        history.push(`/student/${page}`)
+    }
     useEffect(()=>{
         fetch("/teacherdashboard", {
             method: "GET",
