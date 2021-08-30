@@ -12,6 +12,8 @@ router.post('/testform',api.testform)
 router.post("/send_cls_details",api.send_cls_details)
 router.post('/getData',api.classData)
 router.post('/handin',api.handin)
+router.post('/meet',api.meet)
+router.post('/spreadsheet',api.spreadsheet)
 //router.get('/teacherdashboard',api.studentdashboard)
 
 module.exports = router
