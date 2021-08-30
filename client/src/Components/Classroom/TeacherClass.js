@@ -84,7 +84,7 @@ export default function TeacherClass() {
                                 <div className="class-card-name">
                                     <p>{classInfo.classname}</p>
                                     <p style={{ fontSize: 'medium' }}>{classInfo.classcode}</p>
-                                    <a className="class-card-link">{classInfo.meetlink ==='' ? '' : <a onClick={()=>{meet()}}>add meet link</a> }</a>
+                                    <a className="class-card-link">{classInfo.meetlink ==='Not available' ? classInfo.meetlink : <a onClick={()=>{meet()}}>add meet link</a> }</a>
 
                                 </div>
                             </div>
