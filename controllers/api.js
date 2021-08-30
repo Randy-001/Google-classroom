@@ -1,8 +1,8 @@
 const db = require("../modals/schema")
 //const session = require('express-session');
-const GoogleSpreadsheet=require('google-spreadsheet')
-const {promisify} = require('util');
-const creds=require('../client_secret.json')
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+const { promisify } = require('util');
+const creds = require('../client_secret.json')
 var sess;
 
 
@@ -112,14 +112,14 @@ const createclassroom = (req, res) => {
 
 
 }
-const classData = (req,res)=>{
+const classData = (req, res) => {
     const classroom = db.Classroom
-    classroom.findOne({'classcode':req.body.classCode},function(err,result){
-        if(err){
+    classroom.findOne({ 'classcode': req.body.classCode }, function (err, result) {
+        if (err) {
             console.log(err)
         }
-        else{
-            return res.json({'data':result})
+        else {
+            return res.json({ 'data': result })
         }
 
     })
@@ -250,11 +250,11 @@ const testform = (req, res) => {
         for (let i = 0; i < docs[0]["students"].length; i++) {
             a["completed"][docs[0]["students"][i]] = { "submissiondate": null, "marks": `0/${req.body.totalmarks}` }
         }
-        var dic=docs[0]["test"]
-        dic[`${result}`]=a
-        classroom.findOneAndUpdate({"classcode":req.body.classcode}, {"test":dic},(err,d)=>{
-            if(err) throw err
-            return res.json({success:true})
+        var dic = docs[0]["test"]
+        dic[`${result}`] = a
+        classroom.findOneAndUpdate({ "classcode": req.body.classcode }, { "test": dic }, (err, d) => {
+            if (err) throw err
+            return res.json({ success: true })
         });
     })
 }
@@ -267,43 +267,69 @@ const send_cls_details = (req, res) => {
     })
 }
 
-const meet=(req,res)=>{
-    const classroom=db.Classroom
-    classroom.findOneAndUpdate({'classcode':req.body.classcode},{"meetlink":req.body.meetlink},{new:true},(err,docs)=>{
-        if(err) throw err
+const meet = (req, res) => {
+    const classroom = db.Classroom
+    classroom.findOneAndUpdate({ 'classcode': req.body.classcode }, { "meetlink": req.body.meetlink }, { new: true }, (err, docs) => {
+        if (err) throw err
         //console.log(docs)
-        return res.json({success:docs})
+        return res.json({ success: docs })
     })
 }
 
-const handin=(req,res)=>{
-    sess=req.session;
-    const classroom=db.Classroom
-    classroom.find({'classcode':req.body.classcode},(err,docs)=>{
-        if(err) throw err
-        const all_test=docs[0]["test"]
-        console.log("before",all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"])
-        all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"]=new Date();
-        console.log("after",all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"])
-        classroom.findOneAndUpdate({"classcode":req.body.classcode}, {"test":all_test},{new:true},(err,d)=>{
-            if(err) throw err
-            return res.json({success:true})
+const handin = (req, res) => {
+    sess = req.session;
+    const classroom = db.Classroom
+    classroom.find({ 'classcode': req.body.classcode }, (err, docs) => {
+        if (err) throw err
+        const all_test = docs[0]["test"]
+        console.log("before", all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"])
+        all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"] = new Date();
+        console.log("after", all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"])
+        classroom.findOneAndUpdate({ "classcode": req.body.classcode }, { "test": all_test }, { new: true }, (err, d) => {
+            if (err) throw err
+            return res.json({ success: true })
         })
 
     })
 
 
 }
- const spreadsheet=async (req,res)=>{
-         const doc=new GoogleSpreadsheet(req.body.id)
-         await promisify(doc.useServiceAccountAuth)(creds);
-         const info=await promisify(doc.getInfo)()
-         const sheet=info.worksheets[0]
-         console.log(sheet)
-         return res.json({success:true})
- }
+const spreadsheet = async (req, res) => {
+    const classroom = db.Classroom
+    
+        
+        const doc = new GoogleSpreadsheet(req.body.id)
+        await doc.useServiceAccountAuth({
+            client_email: creds.client_email,
+            private_key: creds.private_key,
+        });
 
- //https://docs.google.com/spreadsheets/d/1E30ChZri8WhHDCuNQtOpg14BCnhif6NdcMUoENeonV0/edit?resourcekey#gid=1801588618
+        await doc.loadInfo();
+        //console.log(doc.title);
+        const sheet = doc.sheetsByIndex[0];
+        const rows = await sheet.getRows();
+    classroom.find({ "classcode": req.body.classcode }, (err, docs) => {
+        if (err) throw err
+        const test = docs[0]["test"]
+        for (let i = 0; i < rows.length; i++) {
+            if(rows[i]["email"] in test[`${req.body.testcode}`]["completed"]){
+                test[`${req.body.testcode}`]["completed"][rows[i]["email"]]["marks"]=rows[i]["Score"]
+            }
+            //console.log(rows[i]["Timestamp"], rows[i]["Score"], rows[i]["who is the cat lover"])
+        }
+        classroom.findOneAndUpdate({ "classcode": req.body.classcode }, { "test": test },{new:true},(err,docs)=>{
+            if(err) throw err
+            return res.json({success:docs})
+
+        })
+
+
+
+    })
+
+}
+
+//https://docs.google.com/spreadsheets/d/1E30ChZri8WhHDCuNQtOpg14BCnhif6NdcMUoENeonV0/edit?resourcekey#gid=1801588618
 module.exports = {
     login,
     signup,
@@ -318,6 +344,3 @@ module.exports = {
     meet,
     spreadsheet
 }
-
-
-
