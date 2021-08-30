@@ -3,13 +3,14 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/esm/Container'
 import join from './joinimg.svg'
+import { useHistory } from 'react-router-dom'
 import {useState} from 'react'
 export default function Join() {
     const [classCode,setCode ] = useState('')
+    const history = useHistory()
     const joinClass=()=>{
         let userData = {
-            'classCode':classCode,
-            'gmail':'aakashganesh13@gmail.com'
+            'classCode':classCode
         }
         fetch('/joinclass', {
             method: "POST",
@@ -22,7 +23,12 @@ export default function Join() {
                 return res.json();
             })
             .then((data) => {
-                console.log("data",data)
+                if(data['success'] === true){
+                    history.push('/studentdashboard')
+                }
+                else{
+                    alert('Class not found')
+                }
                
 
             })

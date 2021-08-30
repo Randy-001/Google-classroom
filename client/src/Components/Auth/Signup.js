@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import GoogleLogin from 'react-google-login'
 import GoogleButton from 'react-google-button'
+import { Link } from 'react-router-dom'
 
 const Signup = () => {
     const [username, setUsername] = useState('');
@@ -49,7 +50,15 @@ const Signup = () => {
                 //const s = data.id.insertedId
                 //console.log(data.id.insertedId)
                 //history.push(`/user/${s}/dashboard`);
-                console.log(data)
+                if(data.success && data.teacher){
+                    history.push("/teacherdashboard")
+                }
+                if(data.success && data.student){
+                    history.push("/studentdashboard")
+                }
+                if(!data.success){
+                    history.push("/")
+                }
             })
         }
     }
@@ -101,7 +110,7 @@ const Signup = () => {
 
                             <Form.Group className="mb-3" controlId="formBasicPassword">
                                 <Form.Label id="bt-main-form-lb">Password</Form.Label>
-                                <span className="material-icons" style={{ float: 'right' }} onClick={handleclick}>{icon}</span>
+                                <Link><span className="material-icons" style={{ float: 'right' }} onClick={handleclick}>{icon}</span></Link>
                                 <Form.Control type="password" placeholder="Password" ref={textinput} value={password} onChange={(e) => { setPassword(e.target.value) }} />
                             </Form.Group>
                             <Row>
@@ -128,6 +137,7 @@ const Signup = () => {
                                         />
                                     </Col>
                             </Row>
+                            <p style={{ marginTop: '25px'}}><strong>Already have an account ? <Link to='/' style={{color:'white'}}>Login</Link></strong></p>
                             <br></br>
 
 

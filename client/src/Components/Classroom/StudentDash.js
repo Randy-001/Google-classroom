@@ -6,8 +6,10 @@ import Container from 'react-bootstrap/esm/Container'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import cardimg from './cardimg.svg'
+import Spinner from 'react-bootstrap/Spinner'
+
 import ClsNavbar from "../Navbar/ClsNavbar"
+import cardimg from './cardimg2.svg'
 
 export default function StudentDash() {
     const history = useHistory()
@@ -39,21 +41,25 @@ export default function StudentDash() {
             <Container style={{marginTop:'25px'}}>
                 <Row>
 
-                    {data.length === 0 ? <p>No classes found</p>: data.map((ele) => {
+                    {data.length === 0 ?<Spinner animation="border" id="centering" role="status">
+  
+</Spinner>: data.map((ele) => {
 
                         return (
-                            <Col sm={4}>
-                                <Card border="primary" onClick = {()=>{pageRedirection(ele.classcode)}} style={{ width: '18rem' }} key={ele.classcode}>
-                                    <Card.Img variant="top" src={cardimg} />
-                                    <Card.Body>
-                                        <Card.Title>{ele.classname}</Card.Title>
-                                        <Card.Text>
-                                            {ele.classowner_name}
-                                        </Card.Text>
+                            <div className="cls" key={ele.classcode} onClick = {()=>{pageRedirection(ele.classcode)}}>
+                                <Col lg={4} sm={12}>
+                                    <Card border="primary"  style={{ width: '18rem' }}>
+                                        <Card.Img variant="top" src={cardimg} />
+                                        <Card.Body>
+                                            <Card.Title>{ele.classname}</Card.Title>
+                                            <Card.Text>
+                                                {ele.classowner_name}
+                                            </Card.Text>
 
-                                    </Card.Body>
-                                </Card>
-                            </Col>)
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            </div>)
 
                     })}
 

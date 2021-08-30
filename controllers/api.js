@@ -5,6 +5,7 @@ var sess;
 
 const login=(req,res)=>{
     sess = req.session;
+    console.log(req.body)
     const user=db.User;
     user.find({ email: req.body.username, password: req.body.password}, function (err, docs) {
         if(err) throw err
@@ -18,7 +19,16 @@ const login=(req,res)=>{
             //sess.uniqueid=docs[0]["id"]
             sess.username=docs[0]["username"]
             //console.log(sess)
-            return res.json({success:true})
+            if(docs[0]["teacher"]){
+                return res.json({success:true,teacher:true,student:false})
+            }
+            else if(docs[0]["student"]){
+                return res.json({success:true,student:true,teacher:false})
+            }
+            else{
+                return res.json({success:false,student:false,teacher:false})
+            }
+            
         }
     });
 }
@@ -48,8 +58,8 @@ const signup=(req,res)=>{
                console.log(err)
                sess.destroy()
             })
-            console.log(sess);
-            return res.json({success:true})
+            //console.log(sess);
+            return res.json({success:true,teacher:req.body.teacher,student:req.body.student})
         }
         else{
             return res.json({success:false})
@@ -111,7 +121,7 @@ const joinclass = (req,res)=>{
         }
         else{
            
-            if(result.length !== 0){
+            if(result){
                 classroom.findOneAndUpdate({'classcode':req.body.classCode},{'$push':{'students':sess.email}},
                 function (err, raw) {
                     if (err){
@@ -192,11 +202,7 @@ const studentdashboard=(req,res)=>{
     
             });
                
-                
-            
-            }
-            
-            
+            } 
         }
     })
     
