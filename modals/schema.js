@@ -44,7 +44,7 @@ const classroomschema = new Schema({
     },
     meetlink:{type:String,required:true},
     students:[String],
-    test:[Object]
+    test:Object
     
 })
 const userClassSchema = new Schema({
