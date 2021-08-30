@@ -24,7 +24,8 @@ const userschema=new Schema({
     }
 
 })
-const classroomschema=new Schema({
+
+const classroomschema = new Schema({
     classcode:{
         type:String,
         required:true
@@ -43,8 +44,22 @@ const classroomschema=new Schema({
     },
     meetlink:{type:String,required:true},
     students:[String]
+    
+})
+const userClassSchema = new Schema({
+    email:{
+        type:String,
+        required:true
+    },
+    classes:[String]
 })
 
-const User=mongoose.model('user',userschema);
-const Classroom=mongoose.model('classroom',classroomschema);
-module.exports={User,Classroom};
+const userClass = mongoose.model('userClass',userClassSchema)
+
+const User = mongoose.model('user',userschema);
+const Classroom = mongoose.model('classroom',classroomschema);
+module.exports = {
+    User,
+    Classroom,
+    userClass
+};

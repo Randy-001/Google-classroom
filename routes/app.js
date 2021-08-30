@@ -6,6 +6,9 @@ router.post('/login',api.login)
 router.post('/signup',api.signup)
 router.get('/teacherdashboard',api.teacherdashboard)
 router.post('/createclassroom',api.createclassroom)
+router.get('/studentdashboard',api.studentdashboard)
+router.post('/joinclass',api.joinclass)
+
 //router.get('/teacherdashboard',api.studentdashboard)
 
 module.exports=router

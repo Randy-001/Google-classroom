@@ -71,7 +71,7 @@ const teacherdashboard=(req,res)=>{
 }
 const createclassroom=(req,res)=>{
     sess=req.session;
-    const classroom=db.Classroom;
+    const classroom = db.Classroom;
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
@@ -99,10 +99,120 @@ const createclassroom=(req,res)=>{
     
 
 }
+const joinclass = (req,res)=>{
+    const classroom = db.Classroom;
+    sess = req.session;
+    console.log(sess)
+    console.log(req.body)
+    classroom.findOne({'classcode':req.body.classCode },function(err,result){
+        if(err){
+            console.log(err)
+            
+        }
+        else{
+           
+            if(result.length !== 0){
+                classroom.findOneAndUpdate({'classcode':req.body.classCode},{'$push':{'students':sess.email}},
+                function (err, raw) {
+                    if (err){
+                        console.log(err)
+                    }
+                    else{
+                        const userClasses = db.userClass
+                        userClasses.findOne({'email':sess.email},function(err,resp){
+                            if(err){
+                                console.log(err)
+                            }
+                            else{
+                                console.log(resp)
+                                if(resp === null){
+                                    const newUserClass = new userClasses({
+                                        'email':sess.email,
+                                        'classes':[req.body.classCode]
+                                    })
+                                    newUserClass.save()
+                                }
+                                else{
+                                    userClasses.findOneAndUpdate({'email':sess.email},{'$push':{'classes':req.body.classCode}},function(err,result){
+                                        if (err){
+                                            console.log(err)
+                                        }
+                                        else{
+                                            console.log(raw)
+                                        }
+                                    })
+    
+                                }
+
+                            }
+                           
+                        })
+                       
+
+                        return res.json({success:true})
+                    }
+                })
+
+               
+            }
+            else{
+
+               return res.json({success:false})
+            }
+        }
+    })
+
+
+
+}
+const studentdashboard=(req,res)=>{
+    sess=req.session;
+    const userClasses = db.userClass
+    const classroom=db.Classroom;
+    var classes = []
+    
+    // console.log(sess.email)
+    userClasses.findOne({'email':sess.email},function(err,result){
+        if(err){
+            console.log(err)
+        }
+        else{
+           
+
+            if(result){
+                
+                    
+              
+              classroom.find({
+                'classcode': { $in: 
+                    result['classes']
+                }
+            }, function(err, docs){
+                return res.json({'classes':docs})
+    
+            });
+               
+                
+            
+            }
+            
+            
+        }
+    })
+    
+   
+    
+   
+    
+    
+   
+}
 
 module.exports={
     login,
     signup,
     teacherdashboard,
-    createclassroom
+    createclassroom,
+    studentdashboard,
+    joinclass
 }
