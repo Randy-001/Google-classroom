@@ -1,5 +1,8 @@
 const db = require("../modals/schema")
 //const session = require('express-session');
+const GoogleSpreadsheet=require('google-spreadsheet')
+const {promisify} = require('util');
+const creds=require('../client_secret.json')
 var sess;
 
 
@@ -264,6 +267,15 @@ const send_cls_details = (req, res) => {
     })
 }
 
+const meet=(req,res)=>{
+    const classroom=db.Classroom
+    classroom.findOneAndUpdate({'classcode':req.body.classcode},{"meetlink":req.body.meetlink},{new:true},(err,docs)=>{
+        if(err) throw err
+        //console.log(docs)
+        return res.json({success:docs})
+    })
+}
+
 const handin=(req,res)=>{
     sess=req.session;
     const classroom=db.Classroom
@@ -273,7 +285,7 @@ const handin=(req,res)=>{
         console.log("before",all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"])
         all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"]=new Date();
         console.log("after",all_test[`${req.body.testcode}`]["completed"][`${sess.email}`]["submissiondate"])
-        classroom.findOneAndUpdate({"classcode":req.body.classcode}, {"test":all_test},(err,d)=>{
+        classroom.findOneAndUpdate({"classcode":req.body.classcode}, {"test":all_test},{new:true},(err,d)=>{
             if(err) throw err
             return res.json({success:true})
         })
@@ -282,9 +294,16 @@ const handin=(req,res)=>{
 
 
 }
+ const spreadsheet=async (req,res)=>{
+         const doc=new GoogleSpreadsheet(req.body.id)
+         await promisify(doc.useServiceAccountAuth)(creds);
+         const info=await promisify(doc.getInfo)()
+         const sheet=info.worksheets[0]
+         console.log(sheet)
+         return res.json({success:true})
+ }
 
-
-
+ //https://docs.google.com/spreadsheets/d/1E30ChZri8WhHDCuNQtOpg14BCnhif6NdcMUoENeonV0/edit?resourcekey#gid=1801588618
 module.exports = {
     login,
     signup,
@@ -295,7 +314,9 @@ module.exports = {
     testform,
     send_cls_details,
     classData,
-    handin
+    handin,
+    meet,
+    spreadsheet
 }
 
 
