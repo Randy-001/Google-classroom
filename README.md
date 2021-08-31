@@ -86,11 +86,9 @@ const userschema=new Schema({
         
         required:true
         
-    }
-    
+    } 
 
 })
-
 
 const classroomschema = new Schema({
 
@@ -107,8 +105,7 @@ const classroomschema = new Schema({
         type:String,
         
         required:true
-        
-        
+         
     },
     
     classowner_email:{
@@ -149,5 +146,13 @@ const userClassSchema = new Schema({
     
 })
   
-  
- 
+
+
+
+
+**Feature of automatic mark updation on test conducted using forms:**
+
+For test conduction , the teacher needs to create the test using google forms and will be asked to paste the link of the form as well as the spreadsheet link to that form.
+Our system will retrive the date from the spreadsheet after the completion of test(i.e due time) and update marks for all the students accordingly.
+
+Video based pragirism checker is will be implemented in the upcomming versions.
