@@ -154,7 +154,7 @@ const Login = () => {
                                     onSuccess={Google}
                                     onFailure={Google}
                                     cookiePolicy={'single_host_origin'}
-                                    clientId="335606131708-bi7e3on3evn5b605s8f13h6jpgs2tsac.apps.googleusercontent.com"
+                                    clientId="192693958580-o2h1mdptuv2ui7vg1qcilo3tgoqaqlcg.apps.googleusercontent.com"
                                 />
 
 
