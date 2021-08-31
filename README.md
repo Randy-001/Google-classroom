@@ -1,6 +1,12 @@
 # flipr-google-cls-pro
 A web application similar to google classroom with more features
 
+
+Access our platform via : https://google-cls-flipr.herokuapp.com/signup
+
+
+
+
 This is an application where students and teachers can signup and login and this platform provies a virtual classroom.
 
 This virtual classroom allows teachers to create individual classroom for each of the classes that they handle .This platform paves teachers and students a way to work in a collobarative environment virtually.
