@@ -2,7 +2,8 @@ const db = require("../modals/schema")
 //const session = require('express-session');
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const { promisify } = require('util');
-const creds = require('../client_secret.json')
+const creds = require('../client_secret.json');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require("constants");
 var sess;
 
 
@@ -98,8 +99,8 @@ const createclassroom = (req, res) => {
         classowner_email: sess.email,
         classname: req.body.classname,
         classowner_name: sess.username,
-        meetlink: "Not available"
-
+        meetlink: "Not available",
+        test:{'addd':0}
     })
     cls.save()
         .then(doc => {
@@ -148,38 +149,64 @@ const joinclass = (req, res) => {
                             console.log(err)
                         }
                         else {
-                            const userClasses = db.userClass
-                            userClasses.findOne({ 'email': sess.email }, function (err, resp) {
-                                if (err) {
-                                    console.log(err)
+                            const test = raw["test"]
+                            if(test){
+                                var keys = Object.keys(test)
+                                
+                                const index = keys.indexOf('addd');
+                                if (index > -1) {
+                                    keys.splice(index, 1);
                                 }
-                                else {
-                                    console.log(resp)
-                                    if (resp === null) {
-                                        const newUserClass = new userClasses({
-                                            'email': sess.email,
-                                            'classes': [req.body.classCode]
-                                        })
-                                        newUserClass.save()
+                                
+                                for (let i = 0; i < keys.length; i++) {
+                                    
+                                    // var marks_keys = Object.keys(test[keys[i]]["completed"])
+                                    // console.log('marks_keys',marks_keys)
+                                    // const total_mark = marks_keys[0]["marks"]
+                                    // console.log('total_marks',total_mark)
+                                    test[keys[i]]["completed"][`${sess.email}`] = { "submissiondate": null, "marks": test[keys[i]]['totalmarks']}
+                                }
+                                
+
+                            }
+                            
+                            classroom.findOneAndUpdate({ "classcode": req.body.classCode }, { "test": test }, (err, re) => {
+                                if (err) throw err
+                                const userClasses = db.userClass
+                                userClasses.findOne({ 'email': sess.email }, function (err, resp) {
+                                    if (err) {
+                                        console.log(err)
                                     }
                                     else {
-                                        userClasses.findOneAndUpdate({ 'email': sess.email }, { '$push': { 'classes': req.body.classCode } }, function (err, result) {
-                                            if (err) {
-                                                console.log(err)
-                                            }
-                                            else {
-                                                console.log(raw)
-                                            }
-                                        })
+                                        console.log(resp)
+                                        if (resp === null) {
+                                            const newUserClass = new userClasses({
+                                                'email': sess.email,
+                                                'classes': [req.body.classCode]
+                                            })
+                                            newUserClass.save()
+                                        }
+                                        else {
+                                            userClasses.findOneAndUpdate({ 'email': sess.email }, { '$push': { 'classes': req.body.classCode } }, function (err, result) {
+                                                if (err) {
+                                                    console.log(err)
+                                                }
+                                                else {
+                                                    console.log(raw)
+                                                }
+                                            })
+
+                                        }
 
                                     }
 
-                                }
+                                })
+
+
+                                return res.json({ success: true })
 
                             })
 
-
-                            return res.json({ success: true })
                         }
                     })
 
@@ -200,6 +227,7 @@ const studentdashboard = (req, res) => {
     const userClasses = db.userClass
     const classroom = db.Classroom;
     var classes = []
+    console.log('Stu dash',sess)
 
     // console.log(sess.email)
     userClasses.findOne({ 'email': sess.email }, function (err, result) {
@@ -219,10 +247,20 @@ const studentdashboard = (req, res) => {
                             result['classes']
                     }
                 }, function (err, docs) {
+                    console.log(docs)
                     return res.json({ 'classes': docs })
 
                 });
 
+            }
+            else{
+                const ab = new userClasses({
+                    'email':sess.email,
+                    'classes':[]
+
+                })
+                ab.save()
+                return res.json({ 'classes': [] })
             }
         }
     })
@@ -242,7 +280,9 @@ const testform = (req, res) => {
             result += characters.charAt(Math.floor(Math.random() *
                 charactersLength));
         }
+        a['testname'] = req.body.testname;
         a["testlink"] = req.body.testlink;
+        a['totalmarks'] = "0/"+req.body.totalmarks
         a["duedate"] = new Date(req.body.duedate + " " + req.body.duetime)
         a["postdate"] = new Date();
         //console.log("aaaa=-",a)
@@ -296,30 +336,32 @@ const handin = (req, res) => {
 }
 const spreadsheet = async (req, res) => {
     const classroom = db.Classroom
-    
-        
-        const doc = new GoogleSpreadsheet(req.body.id)
-        await doc.useServiceAccountAuth({
-            client_email: creds.client_email,
-            private_key: creds.private_key,
-        });
 
-        await doc.loadInfo();
-        //console.log(doc.title);
-        const sheet = doc.sheetsByIndex[0];
-        const rows = await sheet.getRows();
+
+    const doc = new GoogleSpreadsheet(req.body.id)
+    await doc.useServiceAccountAuth({
+        client_email: creds.client_email,
+        private_key: creds.private_key,
+    });
+
+    await doc.loadInfo();
+    //console.log(doc.title);
+    const sheet = doc.sheetsByIndex[0];
+    const rows = await sheet.getRows();
     classroom.find({ "classcode": req.body.classcode }, (err, docs) => {
         if (err) throw err
         const test = docs[0]["test"]
         for (let i = 0; i < rows.length; i++) {
-            if(rows[i]["email"] in test[`${req.body.testcode}`]["completed"]){
-                test[`${req.body.testcode}`]["completed"][rows[i]["email"]]["marks"]=rows[i]["Score"]
+            if (rows[i]["email"] in test[`${req.body.testcode}`]["completed"]) {
+                test[`${req.body.testcode}`]["completed"][rows[i]["email"]]["marks"] = rows[i]["Score"]
             }
             //console.log(rows[i]["Timestamp"], rows[i]["Score"], rows[i]["who is the cat lover"])
         }
-        classroom.findOneAndUpdate({ "classcode": req.body.classcode }, { "test": test },{new:true},(err,docs)=>{
-            if(err) throw err
-            return res.json({success:docs})
+        classroom.findOneAndUpdate({ "classcode": req.body.classcode }, { "test": test }, { new: true }, (err, docs) => {
+            if (err) {
+                return res.json({ success: false })
+            }
+            return res.json({ success: true })
 
         })
 

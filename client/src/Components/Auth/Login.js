@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -9,15 +8,16 @@ import Col from 'react-bootstrap/Col'
 import GoogleLogin from 'react-google-login'
 import GoogleButton from 'react-google-button'
 import { Link } from 'react-router-dom'
+import { useCookies } from 'react-cookie';
+
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [cookies, setCookie] = useCookies(['user']);
     const [icon, seticon] = useState('visibility_off')
     const textinput = useRef(null);
     const history = useHistory();
-
-
     function handleclick() {
         if (textinput.current.type === "password") {
             textinput.current.type = "text"
@@ -31,49 +31,50 @@ const Login = () => {
     }
     const handlesubmit = (e) => {
         e.preventDefault()
-        if(username===''|| password===''){
+        if (username === '' || password === '') {
             alert("Kindly enter valid details..")
         }
-        else{
-        const a = { username, password }
-        fetch("/login", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(a)
-        })
-            .then((res) => {
-                return res.json();
+        else {
+            const a = { username, password }
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(a)
             })
-            .then((data) => {
-                console.log("data",data)
-                if(data.success && data.teacher){
-                    history.push("/teacherdashboard")
-                }
-                else if(data.success && data.student){
-                    history.push("/studentdashboard")
-                }
-                else{
-                    alert("Invalid username or password")
-                }
-                /*if (data["id"] === null) {
-                    history.push('/signup')
-                }
-                else {
-                    history.push(`/user/${data["id"]}/dashboard`);
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    console.log("data", data)
+                    if (data.success && data.teacher) {
+                        setCookie('email', username, { path: '/' });
+                        history.push("/teacherdashboard")
+                    }
+                    else if (data.success && data.student) {
+                        setCookie('email', username, { path: '/' });
+                        history.push("/studentdashboard")
+                    }
+                    else {
+                        alert("Invalid username or password")
+                    }
+                    /*if (data["id"] === null) {
+                        history.push('/signup')
+                    }
+                    else {
+                        history.push(`/user/${data["id"]}/dashboard`);
+    
+                    }*/
 
-                }*/
-
-            })
+                })
         }
     }
     const Google = (response) => {
         console.log(response.profileObj)
         console.log(response)
         let a = {
-            "username": response.profileObj.name,
-            "email": response.profileObj.email,
+            "username": response.profileObj.email,
             "password": response.profileObj.googleId
         }
 
@@ -88,13 +89,15 @@ const Login = () => {
                 return res.json();
             })
             .then((data) => {
-                if(data.success && data.teacher){
+                if (data.success && data.teacher) {
+                    setCookie('email', response.profileObj.email, { path: '/' });
                     history.push("/teacherdashboard")
                 }
-                else if(data.success && data.student){
+                else if (data.success && data.student) {
+                    setCookie('email', response.profileObj.email, { path: '/' });
                     history.push("/studentdashboard")
                 }
-                else{
+                else {
                     alert("Invalid username or password")
                 }
                 //console.log("data",data)
@@ -129,9 +132,9 @@ const Login = () => {
                             <Button variant="outline-dark" type="submit">
                                 Log in
                             </Button>
-                            
+
                         </Form>
-                        <p style={{ marginTop: '25px'}}><strong>Don't have an account ? <Link to='/signup' style={{color:'white'}}>Signup</Link></strong></p>
+                        <p style={{ marginTop: '25px' }}><strong>Don't have an account ? <Link to='/signup' style={{ color: 'white' }}>Signup</Link></strong></p>
                         <Row style={{ marginTop: '25px', marginBottom: '25px' }}>
                             <Col lg={12}>
                                 <hr style={{ backgroundColor: "gray" }} />
@@ -151,7 +154,7 @@ const Login = () => {
                                     onSuccess={Google}
                                     onFailure={Google}
                                     cookiePolicy={'single_host_origin'}
-                                    clientId="15125709854-8uie34fks34lkg0fdpbbfru70peno1ae.apps.googleusercontent.com"
+                                    clientId="335606131708-bi7e3on3evn5b605s8f13h6jpgs2tsac.apps.googleusercontent.com"
                                 />
 
 

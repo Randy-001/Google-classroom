@@ -4,14 +4,17 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/esm/Container'
 import { useState,useEffect} from 'react'
+import Alert from 'react-bootstrap/Alert'
+import { Link } from "react-router-dom";
 import cardimg from './teacherimg.svg'
-import ClsNavbar from "../Navbar/ClsNavbar"
+import Navb from "../Navbar/Navb.js"
 import { useHistory } from 'react-router-dom'
 
 export default function Teacherdashboard() {
     const [data,setdata]=useState([])
     const [card,setcard]=useState(false)
     const history = useHistory()
+    const navlist = [{'class':'fa fa-plus','title':'create new class','link':'/create'}]
     useEffect(()=>{
         fetch("/teacherdashboard", {
             method: "GET",
@@ -41,11 +44,22 @@ export default function Teacherdashboard() {
     return (
 
         <div>
-            <ClsNavbar/>
+            <Navb list={navlist}/>
             <Container style={{marginTop:'25px'}}>
                 <Row>
                     
-                    {card && data.map((ele) => {
+                    {card && data.length === 0?  <div id='alert-box'>
+                        <Alert variant="dark">
+                                <Alert.Heading id="col-head-2">You have not yet created any class. Click the below button to create a new class
+                                    
+                                </Alert.Heading>
+
+                                <hr />
+                                <p className="mb-0" style={{textAlign:'center'}}>
+                                    <Link to = '/create'>Create new class</Link>
+                                </p>
+                            </Alert>
+                        </div>:data.map((ele) => {
                         return(
                            <div className="cls" key={ele.classcode} onClick={()=>{pageRedirection(ele.classcode)}}>
                             <Col lg={4} sm={12}>

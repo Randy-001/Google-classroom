@@ -4,9 +4,10 @@ import Col from 'react-bootstrap/Col'
 import Container from 'react-bootstrap/esm/Container'
 import join from './joinimg.svg'
 import { useHistory } from 'react-router-dom'
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 export default function Test() {
+    const [test,setTest ] = useState('')
     const [dueDate,setDue ] = useState('')
     const [formLink,setForm] = useState('')
     const [mark,setMark] = useState('')
@@ -16,6 +17,7 @@ export default function Test() {
     const addForm=(event)=>{
         event.preventDefault()
         let formData = {
+            'testname':test,
             'classcode':id,
             'testlink':formLink,
             'duedate':dueDate,
@@ -41,6 +43,9 @@ export default function Test() {
             })
 
     }
+    useEffect(()=>{
+        alert('kindly add email as one of the fileds in google form.By doing this you can help us to update students score using the spreadsheet response of your form')
+    },[])
     return (
         <div id='test-back-img'>
 
@@ -52,6 +57,7 @@ export default function Test() {
                
                     <Col sm={12} lg={6} id='test-form-col-1'>
                         <form id='test-form'  onSubmit = {addForm}>
+                            <input placeholder = 'Name of test' onChange = {(event)=>{setTest(event.target.value)}} id='form-link-inp'></input>
                             <input placeholder = 'Form link' onChange = {(event)=>{setForm(event.target.value)}} id='form-link-inp'></input>
                             <input placeholder = 'Due date' type='date' onChange = {(event)=>{setDue(event.target.value)}} id='form-link-inp'></input>
                             <input placeholder = 'Due time' type='time' onChange = {(event)=>{setTime(event.target.value)}} id='form-link-inp'></input>

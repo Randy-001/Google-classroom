@@ -107,6 +107,18 @@ code {
   border-radius: 20px;
   background-color: #5931b5;
 }
+#alert-box{
+  
+  margin:0 auto;
+  margin-top: 100px;
+}
+#tab-row{
+  margin-top: 50px;
+}
+#completed{
+  color:greenyellow;
+  float:right
+}
 #meet-btn{
   
   color:whitesmoke;
@@ -367,7 +379,7 @@ code {
 #col-head-2{
   font-size: 18px;
   text-align: center;
-  color: #75759c
+  color:black
 }
 .welcome-msg-username{
   font-size: 18px;

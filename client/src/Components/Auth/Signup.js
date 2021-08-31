@@ -6,8 +6,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import GoogleLogin from 'react-google-login'
+import Cookies from 'universal-cookie';
 import GoogleButton from 'react-google-button'
 import { Link } from 'react-router-dom'
+import { useCookies } from 'react-cookie';
+
 
 const Signup = () => {
     const [username, setUsername] = useState('');
@@ -16,6 +19,7 @@ const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const history = useHistory()
+    const [cookies, setCookie] = useCookies(['user']);
     const [icon, seticon] = useState('visibility_off')
     const textinput = useRef(null);
     function handleclick() {
@@ -51,9 +55,11 @@ const Signup = () => {
                 //console.log(data.id.insertedId)
                 //history.push(`/user/${s}/dashboard`);
                 if(data.success && data.teacher){
+                    setCookie('email', email, { path: '/' });
                     history.push("/teacherdashboard")
                 }
                 if(data.success && data.student){
+                    setCookie('email', email, { path: '/' });
                     history.push("/studentdashboard")
                 }
                 if(!data.success){
@@ -63,33 +69,48 @@ const Signup = () => {
         }
     }
     const Google = (response) => {
-        console.log(response.profileObj)
+       
         let a = {
             "username": response.profileObj.name,
             "email": response.profileObj.email,
             "password": response.profileObj.googleId
         }
-        fetch(`/signup`, {
-            method: 'POST',
-            body: JSON.stringify(a),
-            headers: {
-                'Content-Type': 'application/json',
-            }
+        if(!student && !teacher){
+            alert('Please select student or teacher')
 
-        })
-            .then((res) => {
-                return res.json();
+        }
+        else{
+            a['teacher'] = teacher
+            a['student'] = student
+            fetch(`/signup`, {
+                method: 'POST',
+                body: JSON.stringify(a),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+    
             })
-            .then((data) => {
-                //const s=data.id.insertedId
-                //console.log(this.state)
-                /*const s = data.id.insertedId
-                console.log(data.id.insertedId)
-                history.push(`/user/${s}/dashboard`);*/
-                console.log(data)
+                .then((res) => {
+                    return res.json();
+                })
+                .then((data) => {
+                    if(data.success && data.teacher){
+                        setCookie('email', response.profileObj.email, { path: '/' });
+                        history.push("/teacherdashboard")
+                    }
+                    if(data.success && data.student){
+                        setCookie('email', response.profileObj.email, { path: '/' });
+                        history.push("/studentdashboard")
+                    }
+                    if(!data.success){
+                        history.push("/")
+                    }
+    
+    
+                })
 
-
-            })
+        }
+        
     }
     return (
         <div id="form-boot-con" className="d-flex align-items-center" >
