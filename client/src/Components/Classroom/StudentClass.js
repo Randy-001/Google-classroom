@@ -96,7 +96,7 @@ export default function StudentClass() {
                                 <div className="class-card-name">
                                     <p>{classInfo.classname}</p>
                                     <p style={{ fontSize: 'medium' }}>{classInfo.classcode}</p>
-                                    {classInfo.meetlink === 'Not available'?<p className="class-card-link">{classInfo.meetlink}</p>:<a className="class-card-link" target='_blank' href={classInfo.meetlink}>{classInfo.meetlink}</a>}
+                                    {classInfo.meetlink === 'Not available'?<p className="class-card-link">{classInfo.meetlink}</p>:<p className="class-card-link" onClick={()=>{window.location.href = `${classInfo.meetlink}`}}>{classInfo.meetlink}</p>}
 
                                 </div>
                             </div>
