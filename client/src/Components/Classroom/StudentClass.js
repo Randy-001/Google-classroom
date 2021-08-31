@@ -116,7 +116,7 @@ export default function StudentClass() {
 
                                 <TabPanel>
                                     <Row id='test-cards-con'>
-                                        {test ? <h3 style={{ textAlign: 'center' }}>No tests posted yet</h3>:
+                                        {test.length ===0 ? <h3 style={{ textAlign: 'center' }}>No tests posted yet</h3>:
                                             test.map(ele => {
                                                 // return(<Card>{classInfo['test'][ele]['testlink']}</Card>)
                                                 let date = new Date(classInfo['test'][ele]['duedate']).toString().slice(0, 15)
