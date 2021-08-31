@@ -186,7 +186,7 @@ const Signup = () => {
                                     onSuccess={Google}
                                     onFailure={Google}
                                     cookiePolicy={'single_host_origin'}
-                                    clientId="15125709854-8uie34fks34lkg0fdpbbfru70peno1ae.apps.googleusercontent.com"
+                                    clientId="192693958580-o2h1mdptuv2ui7vg1qcilo3tgoqaqlcg.apps.googleusercontent.com"
                                 />
 
 
