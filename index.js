@@ -5,7 +5,7 @@ const cors=require('cors');
 const path = require('path')
 const mongoose=require('mongoose')
 const session = require('express-session');
-
+const PORT = process.env.PORT || 4000;
      
 const app = express();
 app.use(cors());
@@ -33,6 +33,6 @@ app.get("*", (req, res) => {
      res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
    });
 
-app.listen(process.env.PORT || 4000,function(){
+app.listen(PORT,function(){
      console.log("listening.. on port "+4000);
 });
