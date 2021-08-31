@@ -2,8 +2,11 @@
 A web application similar to google classroom with more features
 
 
-Access our platform via : https://flipr-heroku-gcls.herokuapp.com/
+Access our platform via : https://flipr-hack-gcls.herokuapp.com
 
+**Video link of our project**
+
+https://drive.google.com/file/d/1HO77_8_T8J3wgruywKcyUcSZqXGXS3zJ/view?usp=sharing
 
 
 
