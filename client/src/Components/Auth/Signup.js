@@ -140,7 +140,7 @@ const Signup = () => {
                                         <Form.Check
                                            
                                             label="Teacher"
-                                            value={teacher} onChange={() => { setStudent(true); setTeacher(false); }}
+                                            value={teacher} onChange={() => { setStudent(false); setTeacher(true); }}
                                             name="group1"
                                             type={'radio'}
                                            
