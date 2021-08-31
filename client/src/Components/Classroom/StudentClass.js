@@ -40,7 +40,8 @@ export default function StudentClass() {
             .then((data) => {
 
                 if (data['success']) {
-                    history.push(`/student/${id}`)
+                    //history.push(`/student/${id}`)
+                    window.location.reload(true);
                 }
 
 
