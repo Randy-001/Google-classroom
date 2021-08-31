@@ -42,9 +42,9 @@ This platform enables teachers to create tests and our platform will validate st
 **Feature of automatic mark updation on test conducted using forms:**
 
 For test conduction , the teacher needs to create the test using google forms and will be asked to paste the link of the form .
-Our system will retrive the date from the spreadsheet linked to the google form upto teacher clicking the update score button and will update the marks for all the students accordingly.
+Our system will retrive the date from the spreadsheet linked to the google form after teacher clicking the update score button and will update the marks for all the students accordingly.
 
-Video based pragirism checker is will be implemented in the upcomming versions.
+Video based plagirism checker is will be implemented in the upcomming versions.
 
 
 
