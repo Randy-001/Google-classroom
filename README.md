@@ -2,7 +2,7 @@
 A web application similar to google classroom with more features
 
 
-Access our platform via : https://google-cls-flipr.herokuapp.com/signup
+Access our platform via : https://flipr-heroku-gcls.herokuapp.com/
 
 
 
@@ -17,16 +17,35 @@ This platform enables teachers to create tests and our platform will validate st
 
 
 
-#Usage of the platform:
 
-  1.Sign up with you details or google account.
-  2.Login with the credintials or google account.
-  3.Based on your role (like teacher or student ) you will be redirected to your dashboard accordingly.
-  4.Teachers can create virtual classrooms and can share the classcode with all the students.
-  5.Students will be able to join the classrooms using the classcode recived through mail or from teacher.
-  6.Teachers can create tests and provide the test form links to the platform.
-  7.Students upon completing their test will be getting grades after the due time automatically.
-  8.Teachers can even add meating links.
+**Usage of the platform:**
+
+1.Sign up with you details or google account.
+
+2.Login with the credintials or google account.
+
+3.Based on your role (like teacher or student ) you will be redirected to your dashboard accordingly.
+
+4.Teachers can create virtual classrooms and can share the classcode with all the students.
+
+5.Students will be able to join the classrooms using the classcode recived through mail or from teacher.
+
+6.Teachers can create tests and provide the test form links to the platform.
+
+7.Students upon completing their test will be getting grades after the due time automatically.
+
+8.Teachers can even add meating links.
+
+
+
+
+
+
+
+**Implementational Details :**
+
+Database design:
+
   
   
  
